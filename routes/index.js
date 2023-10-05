@@ -1,3 +1,5 @@
+const express = require('express');
+
 const productsRouter = require('./productsRouter');
 const usersRouter = require('./usersRouter');
 const categoryRouter = require('./categoryRouter');
@@ -7,13 +9,15 @@ const terminosCondicionesRouter = require('./terminosCondicionesRouter');
 const blogRouter = require('./blogRouter');
 
 function routerApi(app) {
-  app.use('/products', productsRouter);
-  app.use('/users', usersRouter);
-  app.use('/category', categoryRouter);
-  app.use('/carrito', carritoRouter);
-  app.use('/pagos', pagoRouter);
-  app.use('/terminosCondiciones', terminosCondicionesRouter);
-  app.use('/blog', blogRouter);
+  const router = express.Router();
+  app.use('/api/v1', router);
+  router.use('/products', productsRouter);
+  router.use('/users', usersRouter);
+  router.use('/category', categoryRouter);
+  router.use('/carrito', carritoRouter);
+  router.use('/pagos', pagoRouter);
+  router.use('/terminosCondiciones', terminosCondicionesRouter);
+  router.use('/blog', blogRouter);
 }
 
 module.exports = routerApi;
