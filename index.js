@@ -14,7 +14,7 @@ const option = {
     if (whiteList.includes(origin) || !origin ) {
       callback(null, true);
     } else {
-      callback(new Error)
+      callback(new Error('No permitido'))
     }
   }
 };
