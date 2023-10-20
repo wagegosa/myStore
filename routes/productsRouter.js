@@ -1,42 +1,28 @@
 const express = require('express');
-const productsService = require('../services/products.service');
+
+const ProductsService = require('../services/products.service');
 const validatorHandler = require('../middleware/validator.hadler');
-const { uctSchema, updateProductSchema, getProductSchema, createProductSchema } = require('../schemas/product.schema');
+const { createProductSchema, updateProductSchema, getProductSchema } = require('./../schemas/product.schema');
 
 const router = express.Router();
-const service = new productsService();
+const service = new ProductsService();
 
-// porductos
-router.get('/', async (req, res, next) =>{
-  try {
-    const product = await service.find();
-    if (!product) {
-      res.json({
-        message: 'No se encontro registro'
-      })
-    } else {
-      res.status(200).json(product);
-    }
-  } catch (error) {
-    next(error);
-  }
+router.get('/', async (req, res) => {
+  const products = await service.find();
+  res.json(products);
 });
-router.get('/filter', (req, res) =>{
-  res.send('Soy un filtro');
+
+router.get('/filter', (req, res) => {
+  res.send('Yo soy un filter');
 });
+
 router.get('/:id',
   validatorHandler(getProductSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const product = await service.findOne(id);
-      if (!product) {
-        res.json({
-          message: 'No se encontro registro'
-        })
-      } else {
-        res.status(200).json(product);
-      }
+      res.json(product);
     } catch (error) {
       next(error);
     }
@@ -67,16 +53,10 @@ router.patch('/:id',
   }
 );
 
-router.delete('/:id', async  (req, res) => {
-  try {
-    const { id } = req.params;
-    const rta = await  service.delete(id, body);
-    res.json(rta);
-  } catch (error) {
-    res.status(404).json({
-      message: error.message
-    });
-  }
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const rta = await service.delete(id);
+  res.json(rta);
 });
 
 module.exports = router;
